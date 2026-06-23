@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.pid
+*.bak
+*.orig
+
+# Certificates and private keys
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+certs/
+acmeout/
+
+# Local Docker overrides
+docker-compose.override.yml
+docker-compose.override.yaml
+
+# Local command notes
+nginx/demo.sh
+
+# Build output
+build/
+dist/
