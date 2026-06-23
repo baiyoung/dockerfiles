@@ -9,11 +9,13 @@ ARG NGINX_SHA256=e5823dc6f45610993def93ebf6cfce68264af4958c77e874b7d20f3709001b8
 ARG HEADERS_MORE_VERSION=0.40
 ARG HEADERS_MORE_SHA256=c14cb5e6c998590c209efbf77bd7637ce2cab02332e4192756a8af5b26ba4284
 ARG NGX_BROTLI_COMMIT=a71f9312c2deb28875acc7bacfdd5695a111aa53
+ARG MAKE_JOBS=2
 
 WORKDIR /usr/local/src
 
 RUN apk add --no-cache \
         build-base \
+        cmake \
         curl \
         git \
         linux-headers \
@@ -38,6 +40,17 @@ RUN set -eux; \
     git submodule update --init --recursive --depth 1
 
 RUN set -eux; \
+    cmake \
+        -S /usr/local/src/ngx_brotli/deps/brotli \
+        -B /usr/local/src/ngx_brotli/deps/brotli/out \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DBROTLI_DISABLE_TESTS=ON; \
+    cmake \
+        --build /usr/local/src/ngx_brotli/deps/brotli/out \
+        --config Release \
+        --target brotlienc \
+        --parallel "${MAKE_JOBS}"; \
     cd /usr/local/src/nginx; \
     ./configure \
         --prefix=/etc/nginx \
@@ -53,7 +66,7 @@ RUN set -eux; \
         --with-stream_ssl_preread_module \
         --add-module=/usr/local/src/ngx_brotli \
         --add-module=/usr/local/src/headers-more; \
-    make -j"$(getconf _NPROCESSORS_ONLN)"; \
+    make -j"${MAKE_JOBS}"; \
     make install
 
 FROM alpine:${ALPINE_VERSION}

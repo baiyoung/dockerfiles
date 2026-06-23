@@ -188,6 +188,7 @@ Dockerfile 支持以下构建参数：
 | `HEADERS_MORE_VERSION` | `0.40` | headers-more 模块版本 |
 | `HEADERS_MORE_SHA256` | Dockerfile 内置值 | headers-more 源码包校验和 |
 | `NGX_BROTLI_COMMIT` | Dockerfile 内置值 | ngx_brotli Git commit |
+| `MAKE_JOBS` | `2` | Brotli 和 NGINX 编译并行任务数 |
 
 例如：
 
